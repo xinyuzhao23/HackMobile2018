@@ -1,0 +1,94 @@
+int button_C = 8;
+int button_D = 9;
+int button_E = 10;
+int button_F = 11;
+int button_G = 12;
+int speaker = 7;
+int buttonstate_C = 0;
+int buttonstate_D = 0;
+int buttonstate_E = 0;
+int buttonstate_F = 0;
+int buttonstate_G = 0;
+
+void setup() {
+  // put your setup code here, to run once:
+
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  int numNotes = random(1, 11);
+  int noteFrequency[5] = {523.251, 587.330, 659.255, 698.456,  783.991};
+  int notes[numNotes];
+  for(int i = 0; i < numNotes; i++){
+    notes[i] = noteFrequency[random(0, 5)];
+    tone(1, notes[i]);
+  }
+
+  int pressed = 0;
+  bool buttonNotPressed = true;
+  int currTone = notes[0];
+  while(pressed < 5){
+    while(buttonNotPressed){
+    }
+    buttonstate_C = digitalRead(button_C);
+    buttonstate_D = digitalRead(button_D);
+    buttonstate_E = digitalRead(button_E);
+    buttonstate_F = digitalRead(button_F);
+    buttonstate_G = digitalRead(button_G);
+    if (buttonstate_C == HIGH) {
+      currTone = notes[0];
+    }
+    if (buttonstate_E == HIGH) {
+       currTone = notes[1];
+    }
+    if (buttonstate_G == HIGH) {
+       currTone = notes[2];
+    }
+    if (buttonstate_D == HIGH) {
+       currTone = notes[3];
+    }
+    if (buttonstate_F == HIGH) {
+       currTone = notes[4];
+    }
+    tone(1, currTone);
+    if(currTone == notes[pressed]){
+      pressed++;
+      setColor(0, 255, 0);
+      delay(10);
+      setColor(0, 0, 0);
+      delay(10);
+      setColor(0, 255, 0);
+      delay(10);
+      setColor(0, 0, 0);
+    }
+    else{
+      setColor(255, 0, 0);
+      delay(10);
+      setColor(0, 0, 0);
+      delay(10);
+      setColor(255, 0, 0);
+      delay(10);
+      setColor(0, 0, 0);
+    }
+  }
+
+  println("You got the correct notes! Press reset to play again!");
+  
+}
+
+bool buttonNotPressed(){
+  return digitalRead(8) == HIGH && digitalRead(9) == HIGH && digitalRead(10) == HIGH
+  digitalRead(11) == HIGH && digitalRead(12) == HIGH;
+}
+
+void setColor(int red, int green, int blue){
+  #ifdef COMMON_ANODE
+  red = 255 - red;
+  green = 255 - green;
+  blue = 255 - blue;
+  #endif
+  analogWrite(redPin, red);
+  analogWrite(greenPin, green);
+  analogWrite(bluePin, blue);
+}
